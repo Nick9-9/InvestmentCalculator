@@ -1,5 +1,6 @@
 using FluentValidation;
 using InvestmentCalculatorAPI.EndPoints;
+using InvestmentCalculatorAPI.Middleware;
 using InvestmentCalculatorAPI.Models;
 using InvestmentCalculatorAPI.Services;
 using InvestmentCalculatorAPI.Services.Contracts;
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<IValidator<InvestmentDetails>, InvestmentValidator>();
 builder.Services.AddScoped<IInvestmentCalculator, InvestmentCalculator>();
+builder.Services.AddScoped<GlobalExceptionHandlingMiddleware>();
 
 var app = builder.Build();
 app.UseSwagger();
@@ -24,4 +26,5 @@ app.UseSwaggerUI(c =>
 
 app.MapInvestmentEndPoints();
 
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.Run();
